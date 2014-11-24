@@ -7,9 +7,9 @@ var Player = function(){
     var element = document.createElement("div");
     element.setAttribute("id", this.title);
     element.setAttribute("class", "player");
-    board.$canvas.append(element);
+    Board.$canvas.append(element);
     this.$element = $(element);
-    board.set_position(this.$element,
+    Board.set_position(this.$element,
                        this.position);
   }
 
@@ -39,11 +39,11 @@ var Player = function(){
   }
 
   this.move = function(position){
-    if(board.is_position_available(position)){
+    if(Board.is_position_available(position)){
       this.position = position;
-      board.set_position(this.get_element(),
+      Board.set_position(this.get_element(),
                          this.position);
-      board.is_game_over();
+      Board.is_game_over();
     }
   }
 

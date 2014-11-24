@@ -10,13 +10,14 @@ Array.is_empty = function(array){
   return array[0] != undefined
 }
 
-var board = {
+var Board = {
   $canvas: null,
   num_block: 77,
   bots: [],
   main_bot: 0,
   player: null,
-  generate_board: function(){
+  signals: [],
+  generate_Board: function(){
     this.get_canvas();
     for(var i = 0; i < this.num_block; i++){
       block = document.createElement("div");
@@ -56,13 +57,14 @@ var board = {
     });
   },
   add_bot: function(bot){
-    var board = this;
+    this.bots.push(bot);
+    var Board = this;
+
     setTimeout(function(){
       bot.init();
       bot.start();
-      board.bots.push(bot);
       if(bot.has_flag)
-        board.main_bot = board.bots.length - 1
+        Board.main_bot = Board.bots.length - 1
     }, 1500);
   },
 
@@ -73,6 +75,12 @@ var board = {
       this.stop_bots();
       alert("You Won");
     }
+  },
+
+  alert_position: function(position){
+    var do_signal = Array.compare(position, this.player.position);
+    if(do_signal)
+      Signal.show(position);
   },
 
   stop_bots: function(){
@@ -88,6 +96,22 @@ var board = {
   }
 };
 
+var Signal = {
+  show: function(position){
+    $signal = $("#signal");
+    Board.set_position($signal, position);
+    Board.signals.push(position);
+    $signal.toggle();
+    setTimeout(function(){
+      $signal.toggle();
+    }, 10000);
+  },
+  create: function(){
+    var signal = document.createElement("div");
+    signal.setAttribute("id", "signal");
+    Board.$canvas.append(signal);
+  }
+}
 
 
 

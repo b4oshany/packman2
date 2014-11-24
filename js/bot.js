@@ -2,7 +2,6 @@ var Bot = function(){
   this.title = "bot1";
   this.prev_position = [0,0]
   this.cur_position = [0,0];
-  this.signal = [[380, 380]];
   this.$element = null;
   this.interval = null;
   this.has_flag = false;
@@ -11,57 +10,67 @@ var Bot = function(){
     var element = document.createElement("div");
     element.setAttribute("id", this.title);
     element.setAttribute("class", "bot");
-    board.$canvas.append(element);
+    Board.$canvas.append(element);
     this.$element = $(element);
-    board.set_position(this.$element,
+    Board.set_position(this.$element,
                        this.cur_position)
+    return this;
   }
 
   this.get_element = function(){
     return $("#"+this.title);
   }
 
-  this.move_up = function(){
+  this.alert = function(){
+    Signal.show(this.cur_position);
+  }
+
+  this.look_up = function(){
     return this.next_postion(0, -20);
   }
 
-  this.move_down = function(){
+  this.look_down = function(){
     return this.next_postion(0, 20);
   }
 
-  this.move_left = function(){
+  this.look_left = function(){
     return this.next_postion(-20, 0);
   }
 
-  this.move_right = function(){
+  this.look_right = function(){
     return this.next_postion(20, 0);
   }
 
   this.move = function(position){
-    if(board.is_position_available(position)){
+    if(Board.is_position_available(position)){
       this.prev_position = this.cur_position.slice();
       this.cur_position = position;
-      board.set_position(this.get_element(),
+      Board.set_position(this.get_element(),
                          this.cur_position);
-      board.is_game_over();
+      Board.is_game_over();
     }
   }
 
   this.next_postion = function(x, y){
     var position = this.cur_position.slice();
     position[0] += x; position[1] += y;
+    Board.alert_position(position);
     return position;
   }
 
+  this.all_moves = function(){
+    return [this.look_up(),
+            this.look_down(),
+            this.look_left(),
+            this.look_right()
+           ];
+  }
+
   this.get_available_move = function(){
-    var position = [this.move_up(),
-                    this.move_down(),
-                    this.move_left(),
-                    this.move_right()
-                   ]
+    var moves = this.all_moves();
     var bot = this;
-    return position.filter(function(position, index, arrary){
-      return (board.is_position_available(position) && !Array.compare(bot.prev_position, position));
+    return moves.filter(function(position, index, arrary){
+      return (Board.is_position_available(position) && !Array.compare(bot.prev_position, position));
     });
   }
 
@@ -82,6 +91,7 @@ var Bot = function(){
     else
       var move = this.best_move();
     this.move(move);
+    return this.cur_position
   }
 
   this.start = function(){
@@ -89,9 +99,13 @@ var Bot = function(){
     this.interval = setInterval(function(){
       bot.do_move();
     }, 500);
+    return this;
   }
 
   this.stop = function(){
     clearInterval(this.interval);
+    return this;
   }
 }
+
+Bot.signals = [];
