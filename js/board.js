@@ -13,6 +13,9 @@ Array.is_empty = function(array){
 var board = {
   $canvas: null,
   num_block: 77,
+  bots: [],
+  main_bot: 0,
+  player: null,
   generate_board: function(){
     this.get_canvas();
     for(var i = 0; i < this.num_block; i++){
@@ -51,6 +54,34 @@ var board = {
       "top": position[1]+"px",
       "left": position[0]+"px"
     });
+  },
+  add_bot: function(bot){
+    bot.init();
+    bot.start();
+    this.bots.push(bot);
+    if(bot.has_flag)
+      this.main_bot = this.bots.length - 1
+  },
+
+  is_game_over: function(){
+    var main_bot = this.bots[this.main_bot];
+    var is_over = Array.compare(main_bot.cur_position, this.player.position);
+    if(is_over){
+      this.stop_bots();
+      alert("You Won");
+    }
+  },
+
+  stop_bots: function(){
+    for(var i in this.bots){
+      this.bots[i].stop();
+    }
+  },
+
+  add_player: function(player){
+    player.init();
+    player.movement_listener();
+    this.player = player;
   }
 };
 

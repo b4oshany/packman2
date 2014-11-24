@@ -5,8 +5,9 @@ var Bot = function(){
   this.signal = [[380, 380]];
   this.$element = null;
   this.interval = null;
+  this.has_flag = false;
 
-  this.initate = function(){
+  this.init = function(){
     var element = document.createElement("div");
     element.setAttribute("id", this.title);
     element.setAttribute("class", "bot");
@@ -14,7 +15,6 @@ var Bot = function(){
     this.$element = $(element);
     board.set_position(this.$element,
                        this.cur_position)
-    this.start();
   }
 
   this.get_element = function(){
@@ -43,6 +43,7 @@ var Bot = function(){
       this.cur_position = position;
       board.set_position(this.get_element(),
                          this.cur_position);
+      board.is_game_over();
     }
   }
 
@@ -86,12 +87,10 @@ var Bot = function(){
   this.start = function(){
     this.interval = setInterval(function(){
       bot1.do_move();
-    }, 1500);
+    }, 500);
   }
 
   this.stop = function(){
     clearInterval(this.interval);
   }
-
-  this.initate();
 }

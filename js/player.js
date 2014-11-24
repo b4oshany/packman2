@@ -3,7 +3,7 @@ var Player = function(){
   this.position = [380, 380];
   this.$element = null;
 
-  this.initate = function(){
+  this.init = function(){
     var element = document.createElement("div");
     element.setAttribute("id", this.title);
     element.setAttribute("class", "player");
@@ -43,6 +43,7 @@ var Player = function(){
       this.position = position;
       board.set_position(this.get_element(),
                          this.position);
+      board.is_game_over();
     }
   }
 
@@ -66,6 +67,4 @@ var Player = function(){
         player.move_right();
     });
   }
-
-  this.initate();
 }
