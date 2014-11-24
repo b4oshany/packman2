@@ -56,11 +56,14 @@ var board = {
     });
   },
   add_bot: function(bot){
-    bot.init();
-    bot.start();
-    this.bots.push(bot);
-    if(bot.has_flag)
-      this.main_bot = this.bots.length - 1
+    var board = this;
+    setTimeout(function(){
+      bot.init();
+      bot.start();
+      board.bots.push(bot);
+      if(bot.has_flag)
+        board.main_bot = board.bots.length - 1
+    }, 1500);
   },
 
   is_game_over: function(){

@@ -85,8 +85,9 @@ var Bot = function(){
   }
 
   this.start = function(){
+    var bot = this;
     this.interval = setInterval(function(){
-      bot1.do_move();
+      bot.do_move();
     }, 500);
   }
 
